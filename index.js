@@ -8,7 +8,7 @@ const mongoose = require('mongoose');
 const app = express();
 
 app.set('view engine', 'ejs');
-
+app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({
   extended: true
 }));
@@ -83,8 +83,8 @@ app.post('/auth', function(req, res){
 
     const newUser = new Auth({
         auth_id : cnt_emails++,
-        email : req.query.email,
-        password : req.query.password
+        email : req.both.email,
+        password : req.both.password
     })
 
     newUser.save(function(err){
@@ -149,11 +149,15 @@ app.get('/notes', function(req, res){
 
 app.post('/notes', function(req, res){
 
+    console.log(req);
+
+    console.log(req.body);
+    
     const newNote = new Note({
         note_id : cnt_notes++,
-        email : req.query.email,
-        title : req.query.title,
-        data : req.query.data
+        email : req.body.email,
+        title : req.body.title,
+        data : req.body.data
     })
 
     newNote.save(function(err){

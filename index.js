@@ -125,7 +125,7 @@ app
   .route("/auth/:uniqueId")
 
   .get(function (req, res) {
-    Auth.findOne({ _id: req.params.uniqueId }, function (err, foundAuth) {
+    Auth.findOne({ email_id: req.params.uniqueId }, function (err, foundAuth) {
       if (!err) {
         console.log(
           "Success GET /auth/uniqueId : ",
@@ -141,7 +141,7 @@ app
   })
 
   .delete(function (req, res) {
-    Auth.deleteOne({ _id: req.params.uniqueId }, function (err) {
+    Auth.deleteOne({ email_id: req.params.uniqueId }, function (err) {
       if (!err) {
         console.log("Success DELETE /auth/uniqueId", req.params.uniqueId);
         res.send("Success");

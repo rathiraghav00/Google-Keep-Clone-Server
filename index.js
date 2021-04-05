@@ -8,10 +8,13 @@ const mongoose = require('mongoose');
 const app = express();
 
 app.set('view engine', 'ejs');
+
 app.use(bodyParser.json()); // for parsing application/json
+
 app.use(bodyParser.urlencoded({
   extended: true
 }));
+
 app.use(express.static("public"));
 
 app.listen(3000, function() {
@@ -31,15 +34,11 @@ app.use((req, res, next) => {
 mongoose.connect('mongodb://localhost:27017/GKC', {useNewUrlParser : true});
 //////////////////////////////// CONNECTION ESTABLISHED  //////////////////////////////////////
 
-var cnt_notes = 0;
-var cnt_emails = 0;
-
 // Schema of Note
 const noteSchema = new mongoose.Schema ({
-    note_id : Number,
-    email : String,
+    email_id : String,
     title : String,
-    data : String
+    content : String
 })
 
 const Note = mongoose.model("Note", noteSchema);
@@ -56,7 +55,6 @@ const Note = mongoose.model("Note", noteSchema);
 
 // Schema of Auth
 const authSchema = new mongoose.Schema ({
-    auth_id : Number,
     email : String,
     password : String
 })
@@ -73,110 +71,132 @@ const Auth = mongoose.model("Auth", authSchema);
 
 
 //////////////////////////////// AUTH  //////////////////////////////////////
-app.get('/auth', function(req, res){
+
+app.route('/auth')
+
+.get(function(req, res){
     Auth.find(function(err, foundAuths){
-        res.send(foundAuths);
+        if(!err){
+            console.log("Success GET /auth request", foundAuths);
+            res.send(foundAuths);
+        }
+        else{
+            console.log("Error GET /auth request", err);
+            res.send(err);
+        }
+        
     });
 });
 
-app.post('/auth', function(req, res){
+.post(function(req, res){
 
     const newUser = new Auth({
-        auth_id : cnt_emails++,
-        email : req.both.email,
-        password : req.both.password
+        email : req.body.email,
+        password : req.body.password
     })
 
     newUser.save(function(err){
         if(err){
-            console.log(err);
+            console.log("Error while POST /auth : ", newNote, err);
+            res.send(err);
         }
         else{
-            console.log("New User saved i.e email and password");
+            console.log("Succes POST /auth : ", newUser);
             res.send("Success");
         }
     })
 })
 
-app.delete('/auth', function(req, res){
+.delete(function(req, res){
     Auth.deleteMany(function(err){
         if(!err){
-            console.log("Succesfully deleted all the athorisation details");
+            console.log("Success DELETE /auth");
+            res.send("Success");
         }
         else {
-            console.log(err);
+            console.log("Error DELETE /auth ", err);
+            res.send(err);
         }
     })
 })
 
 //////////////////////////////// AUTH - SPECIFIC ID  //////////////////////////////////////
 
-app.route('/auth/:authEmail')
+app.route('/auth/:uniqueId')
 
 .get(function(req, res){
-    Auth.findOne({email : req.params.authEmail}, function(err, foundAuth){
-        if(!foundAuth){
-            res.send("Invalid Query : No such record in auth found");
+    Auth.findOne({_id : req.params.uniqueId}, function(err, foundAuth){
+        if(!err){
+            console.log("Success GET /auth/uniqueId : ", uniqueId, foundAuth);
+            res.send(foundAuth);
         }
         else{
-            res.send(foundAuth);
+            console.log("Error GET /auth/uniqueId : ", uniqueId, err);
+            res.send(err);
         }
     })
 })
 
 .delete(function(req, res){
-    Auth.deleteOne(
-        {email : req.params.authEmail},
+    Auth.deleteOne({_id : req.params.uniqueId},
         function(err)
         {
             if(!err){
-                res.send("Successfully Deleted");
+                console.log("Success DELETE /auth/uniqueId", uniqueId);
+                res.send("Success");
             }
             else
             {
-                res.send("Invalid Query : No such record exists");
+                console.log("Error DELETE /auth/uniqueId", uniqueId);
+                res.send(err);
             }
         }
     )
 })
 
 //////////////////////////////// NOTES //////////////////////////////////////
+
 app.get('/notes', function(req, res){
     Note.find(function(err, foundNotes){
-        res.send(foundNotes);
+        if(!err){
+            console.log("Success GET /notes", foundNotes);
+            res.send(foundNotes);
+        }
+        else{
+            console.log("Error while GET /notes", err);
+            res.send(err);
+        }    
     })
 })
 
-app.post('/notes', function(req, res){
-
-    console.log(req);
-
-    console.log(req.body);
-    
+app.post('/notes', function(req, res){  
     const newNote = new Note({
-        note_id : cnt_notes++,
         email : req.body.email,
         title : req.body.title,
-        data : req.body.data
+        content : req.body.content
     })
 
     newNote.save(function(err){
         if(err){
-            console.log(err);
+            console.log("Error POST /notes", newNote, err);
+            res.send(err);
         }
         else{
-            console.log("New Note Saved");
+            console.log("Success POST /notes", newNote);
             res.send("Success");
         }
     })
 })
 
 app.delete('/notes', function(req, res){
+
     Note.deleteMany(function(err){
         if(!err){
-            res.send("Success!");
+            console.log("All notes deleted");
+            res.send("Success");
         }
         else {
+            console.log("Error while deleting all nodes", err);
             res.send(err);
         }
     })
@@ -184,30 +204,32 @@ app.delete('/notes', function(req, res){
 
 //////////////////////////////// NOTES - SPECIFIC ID  //////////////////////////////////////
 
-app.route('/notes/:noteId')
+app.route('/notes/:uniqueId')
 
 .get(function(req, res){
 
-    console.log(req.params.noteId);
-
-    Note.findOne({note_id : req.params.noteId}, function(err, foundNote){
-        if(!foundNote){
-            res.send("Invalid Query : No such record in auth found");
+    Note.findOne({_id : req.params.uniqueId}, function(err, foundNote){
+        if(!err){
+            console.log("Success GET /notes/uniqueId ", uniqueId, foundNote);
+            res.send(foundNote);
         }
         else{
-            res.send(foundNote);
+            console.log("Error GET /notes/uniqueId ", uniqueId, err);
+            res.send(err);
         }
     })
 })
 
 .delete(function(req, res){
-    Note.deleteOne({note_id : req.params.noteId},function(err){
+    Note.deleteOne({_id : req.params.uniqueId},function(err){
             if(!err){
-                res.send("Successfully Deleteds");
+                console.log("Success DELETE /notes/uniqueId", uniqueId);
+                res.send("Success");
             }
             else
             {
-                res.send("Invalid Query : No such record exists");
+                console.log("Error DELETE /notes/uniqueId", uniqueId);
+                res.send(err);
             }
         });
 });

@@ -228,7 +228,7 @@ app
   })
 
   .delete(function (req, res) {
-    Note.deleteOne({ email_id: req.params.uniqueId }, function (err) {
+    Note.deleteOne({ _id: req.params.uniqueId }, function (err) {
       if (!err) {
         console.log("Success DELETE /notes/uniqueId", req.params.uniqueId);
         res.send("Success");

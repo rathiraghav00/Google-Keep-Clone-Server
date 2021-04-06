@@ -204,7 +204,7 @@ app
   .route("/notes/:uniqueId")
 
   .get(function (req, res) {
-    Note.findOne({ _id: req.params.uniqueId }, function (err, foundNote) {
+    Note.find({ email_id: req.params.uniqueId }, function (err, foundNote) {
       if (!err) {
         console.log(
           "Success GET /notes/uniqueId ",
@@ -220,7 +220,7 @@ app
   })
 
   .delete(function (req, res) {
-    Note.deleteOne({ _id: req.params.uniqueId }, function (err) {
+    Note.deleteOne({ email_id: req.params.uniqueId }, function (err) {
       if (!err) {
         console.log("Success DELETE /notes/uniqueId", req.params.uniqueId);
         res.send("Success");

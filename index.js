@@ -36,7 +36,9 @@ app.use((req, res, next) => {
   next();
 });
 
-mongoose.connect("mongodb://localhost:27017/GKC", { useNewUrlParser: true });
+const URL =
+  "mongodb+srv://admin-raghav:raghav2710@cluster0.kulcz.mongodb.net/GKC";
+mongoose.connect(URL, { useNewUrlParser: true });
 //////////////////////////////// CONNECTION ESTABLISHED  //////////////////////////////////////
 
 // Schema of Note

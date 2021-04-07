@@ -42,6 +42,7 @@ app.use((req, res, next) => {
   next();
 });
 
+// Link to connection
 const URL =
   "mongodb+srv://admin-raghav:raghav2710@cluster0.kulcz.mongodb.net/GKC";
 mongoose.connect(URL, { useNewUrlParser: true });

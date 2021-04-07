@@ -49,6 +49,7 @@ mongoose.connect(URL, { useNewUrlParser: true });
 //////////////////////////////// CONNECTION ESTABLISHED  //////////////////////////////////////
 
 // Schema of Note
+// Hi
 const noteSchema = new mongoose.Schema({
   email_id: String,
   title: String,

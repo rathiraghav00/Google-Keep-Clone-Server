@@ -1,6 +1,5 @@
 // jshint esversion:6
-const dotenv = require("dotenv");
-dotenv.config();
+
 const express = require("express");
 const bodyParser = require("body-parser");
 const ejs = require("ejs");
@@ -43,11 +42,14 @@ app.use((req, res, next) => {
   next();
 });
 
-const URL = process.env.MONGO_DB_URL;
+// Link to connection
+const URL =
+  "mongodb+srv://admin-raghav:raghav2710@cluster0.kulcz.mongodb.net/GKC";
 mongoose.connect(URL, { useNewUrlParser: true });
 //////////////////////////////// CONNECTION ESTABLISHED  //////////////////////////////////////
 
 // Schema of Note
+// Hi
 const noteSchema = new mongoose.Schema({
   email_id: String,
   title: String,
@@ -56,6 +58,16 @@ const noteSchema = new mongoose.Schema({
 
 const Note = mongoose.model("Note", noteSchema);
 
+// const note = new Note ({
+//     email : "abcd@gmail.com",
+//     title : "Apple",
+//     data : "Hi I am apple"
+// })
+
+// note.save();
+
+// console.log("note has been saved");
+
 // Schema of Auth
 const authSchema = new mongoose.Schema({
   email_id: String,
@@ -63,6 +75,13 @@ const authSchema = new mongoose.Schema({
 });
 
 const Auth = mongoose.model("Auth", authSchema);
+
+// const auth = new Auth ({
+//     email : "abcd@gmail.com",
+//     password : "abcd"
+// })
+
+// auth.save();
 
 //////////////////////////////// AUTH  //////////////////////////////////////
 

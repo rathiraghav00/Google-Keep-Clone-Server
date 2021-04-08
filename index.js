@@ -26,7 +26,7 @@ if (port == null || port == "") {
 app.use(express.static("public"));
 
 app.listen(port, function () {
-  console.log("Server started successfully");
+  
 });
 
 app.use((req, res, next) => {
@@ -66,7 +66,7 @@ const Note = mongoose.model("Note", noteSchema);
 
 // note.save();
 
-// console.log("note has been saved");
+// 
 
 // Schema of Auth
 const authSchema = new mongoose.Schema({
@@ -91,10 +91,10 @@ app
   .get(function (req, res) {
     Auth.find(function (err, foundAuths) {
       if (!err) {
-        console.log("Success GET /auth request", foundAuths);
+        
         res.send(foundAuths);
       } else {
-        console.log("Error GET /auth request", err);
+        
         res.send(err);
       }
     });
@@ -108,10 +108,10 @@ app
 
     newUser.save(function (err) {
       if (err) {
-        console.log("Error while POST /auth : ", newNote, err);
+        
         res.send(err);
       } else {
-        console.log("Succes POST /auth : ", newUser);
+        
         res.send("Success");
       }
     });
@@ -120,10 +120,10 @@ app
   .delete(function (req, res) {
     Auth.deleteMany(function (err) {
       if (!err) {
-        console.log("Success DELETE /auth");
+        
         res.send("Success");
       } else {
-        console.log("Error DELETE /auth ", err);
+        
         res.send(err);
       }
     });
@@ -137,14 +137,14 @@ app
   .get(function (req, res) {
     Auth.findOne({ email_id: req.params.uniqueId }, function (err, foundAuth) {
       if (!err) {
-        console.log(
+        
           "Success GET /auth/uniqueId : ",
           req.params.uniqueId,
           foundAuth
         );
         res.send(foundAuth);
       } else {
-        console.log("Error GET /auth/uniqueId : ", req.params.uniqueId, err);
+        
         res.send(err);
       }
     });
@@ -153,10 +153,10 @@ app
   .delete(function (req, res) {
     Auth.deleteOne({ email_id: req.params.uniqueId }, function (err) {
       if (!err) {
-        console.log("Success DELETE /auth/uniqueId", req.params.uniqueId);
+        
         res.send("Success");
       } else {
-        console.log("Error DELETE /auth/uniqueId", req.params.uniqueId);
+        
         res.send(err);
       }
     });
@@ -167,10 +167,10 @@ app
 app.get("/notes", function (req, res) {
   Note.find(function (err, foundNotes) {
     if (!err) {
-      console.log("Success GET /notes", foundNotes);
+      
       res.send(foundNotes);
     } else {
-      console.log("Error while GET /notes", err);
+      
       res.send(err);
     }
   });
@@ -183,14 +183,14 @@ app.post("/notes", function (req, res) {
     content: req.body.content || req.query.content,
   });
 
-  console.log(newNote);
+  
 
   newNote.save(function (err) {
     if (err) {
-      console.log("Error POST /notes", newNote, err);
+      
       res.send(err);
     } else {
-      console.log("Success POST /notes", newNote);
+      
       res.send("Successesses");
     }
   });
@@ -199,10 +199,10 @@ app.post("/notes", function (req, res) {
 app.delete("/notes", function (req, res) {
   Note.deleteMany(function (err) {
     if (!err) {
-      console.log("All notes deleted");
+      
       res.send("Success");
     } else {
-      console.log("Error while deleting all nodes", err);
+      
       res.send(err);
     }
   });
@@ -216,14 +216,14 @@ app
   .get(function (req, res) {
     Note.find({ email_id: req.params.uniqueId }, function (err, foundNote) {
       if (!err) {
-        console.log(
+        
           "Success GET /notes/uniqueId ",
           req.params.uniqueId,
           foundNote
         );
         res.send(foundNote);
       } else {
-        console.log("Error GET /notes/uniqueId ", req.params.uniqueId, err);
+        
         res.send(err);
       }
     });
@@ -232,10 +232,10 @@ app
   .delete(function (req, res) {
     Note.deleteOne({ _id: req.params.uniqueId }, function (err) {
       if (!err) {
-        console.log("Success DELETE /notes/uniqueId", req.params.uniqueId);
+        
         res.send("Success");
       } else {
-        console.log("Error DELETE /notes/uniqueId", req.params.uniqueId);
+        
         res.send(err);
       }
     });
